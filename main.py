@@ -9,7 +9,7 @@ from GiaiMaHopDong import *
 from NhanHopDong import *
 from xulykey import RSA
 import docx2txt
-# from client import *
+import socket
 
 
 class Main(QMainWindow):
@@ -61,6 +61,7 @@ class Main(QMainWindow):
 
         # nút ở nhận hợp đồng
         self.NhanHopDongUi.pushButton_Back.clicked.connect(self.Trovetrangchu2)
+        self.NhanHopDongUi.pushButton.clicked.connect(self.chayserver)
 
     # nút ở đang đăng nhập
     def dangNhap(self):
@@ -72,10 +73,8 @@ class Main(QMainWindow):
         else:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Information)
-            msg.setText("This is a message box")
-            msg.setInformativeText("This is additional information")
-            msg.setWindowTitle("MessageBox demo")
-            msg.setDetailedText("The details are as follows:")
+            msg.setText("Tài khoản không hợp lệ!!!")
+            msg.setWindowTitle("Thông báo")
             msg.exec_()
 
     def dangky(self):
@@ -110,17 +109,13 @@ class Main(QMainWindow):
         self.rsa = RSA(keysize=32)
 
         msg = docx2txt.process(self.Text_3.text())
-        email = self.Text.text()
+        PORT = self.Text.text()
         tieude = self.Text_2.text()
 
         enc = self.rsa.encrypt(msg)
 
         f = open("tieude.txt", "w")
         f.write(tieude)
-        f.close()
-
-        f = open("email.txt", "w")
-        f.write(email)
         f.close()
 
         f = open("data/data.txt", "w")
@@ -133,7 +128,35 @@ class Main(QMainWindow):
         f.write(" " + str(self.rsa.N))
         f.close()
 
-        # main_client()
+        # ----------------client---------------
+        IP = socket.gethostbyname(socket.gethostname())
+        ADDR = (IP, PORT)
+        FORMAT = "utf-8"
+        SIZE = 1024
+
+        # Chạy TCP socket
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        # Kết nối đến server
+        client.connect(ADDR)
+
+        # Mở đọc dữ liệu
+        file = open("data/data.txt", "r")
+        data = file.read()
+
+        # Gửi file đến server
+        client.send("data/data.txt".encode(FORMAT))
+        msg = client.recv(SIZE).decode(FORMAT)
+        print(f"[SERVER]: {msg}")
+
+        # Truyền data đến server
+        client.send(data.encode(FORMAT))
+        msg = client.recv(SIZE).decode(FORMAT)
+        print(f"[SERVER]: {msg}")
+
+        file.close()
+        client.close()
+
         print("ok")
 
     def linkto(self):
@@ -153,6 +176,54 @@ class Main(QMainWindow):
     def Trovetrangchu2(self):
         self.NhanHopDongWin.close()
         self.trangChuWin.show()
+
+    def chayserver(self):
+        IP = socket.gethostbyname(socket.gethostname())
+        # PORT = random.randint(1100, 65535)
+        PORT = 65535
+        ADDR = (IP, PORT)
+        SIZE = 1024
+        FORMAT = "utf-8"
+
+        print("[STARTING] Server is starting.")
+        """ Staring a TCP socket. """
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        """ Bind the IP and PORT to the server. """
+        server.bind(ADDR)
+
+        """ Server is listening, i.e., server is now waiting for the client to connected. """
+        server.listen()
+        print("[LISTENING] Server is listening.")
+
+        while True:
+            """ Server has accepted the connection from the client. """
+            conn, addr = server.accept()
+            print(f"[NEW CONNECTION] {addr} connected.")
+
+            """ Receiving the filename from the client. """
+            filename = conn.recv(SIZE).decode(FORMAT)
+            print(f"[RECV] Receiving the filename.")
+            file = open(filename, "w")
+            conn.send("Filename received.".encode(FORMAT))
+
+            """ Receiving the file data from the client. """
+            data = conn.recv(SIZE).decode(FORMAT)
+            print(f"[RECV] Receiving the file data.")
+            conn.send("File data received".encode(FORMAT))
+            f = open("server_data/server_data.txt", "w")
+            f.write(data)
+            """ Closing the file. """
+            f.close()
+
+            """ Closing the connection from the client. """
+            conn.close()
+            print(f"[DISCONNECTED] {addr} disconnected.")
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setText("Đã nhận được hợp đồng!!!")
+            msg.setWindowTitle("Thông báo")
+            msg.exec_()
 
 
 if __name__ == '__main__':

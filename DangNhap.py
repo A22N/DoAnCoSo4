@@ -28,15 +28,14 @@ class Ui_DangNhapWindow(object):
         self.label.setGeometry(QtCore.QRect(0, 0, 311, 421))
         self.label.setText("")
         self.label.setPixmap(QtGui.QPixmap(
-            "C:/Users/HAMATASURIMA/Desktop/hop-dong-dien-tu-va-chu-ky-so-1.jpg"))
+            "hop-dong-dien-tu-va-chu-ky-so-1.jpg"))
         self.label.setScaledContents(True)
         self.label.setWordWrap(True)
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(360, 40, 41, 31))
         self.label_2.setText("")
-        self.label_2.setPixmap(QtGui.QPixmap(
-            "C:/Users/HAMATASURIMA/Desktop/HYde (1).png"))
+        self.label_2.setPixmap(QtGui.QPixmap("HYde (1).png"))
         self.label_2.setScaledContents(True)
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(self.centralwidget)

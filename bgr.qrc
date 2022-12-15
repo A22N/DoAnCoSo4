@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="background">
+    <file>HYde (1).png</file>
+    <file>image/Nen-xanh-duong-pastel.ng.jpg</file>
+    <file>image/bgr.png</file>
+  </qresource>
+</RCC>
