@@ -1,1 +1,1 @@
-bro
+File gửi sẽ được mã hóa tại đây ạ theo phương thức RSA

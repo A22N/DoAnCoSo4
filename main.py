@@ -108,9 +108,9 @@ class Main(QMainWindow):
     def HopDong_result(self):
         self.rsa = RSA(keysize=32)
 
-        msg = docx2txt.process(self.Text_3.text())
-        PORT = self.Text.text()
-        tieude = self.Text_2.text()
+        msg = docx2txt.process(self.HopDongUi.Text_3.text())
+        PORT = self.HopDongUi.Text.text()
+        tieude = self.HopDongUi.Text_2.text()
 
         enc = self.rsa.encrypt(msg)
 
@@ -121,12 +121,13 @@ class Main(QMainWindow):
         f = open("data/data.txt", "w")
         f.write(enc)
         f.close()
-        print("ok")
 
         f = open("data/data.txt.txt", "a")
         f.write(" " + str(self.rsa.d))
         f.write(" " + str(self.rsa.N))
         f.close()
+
+        print("ok")
 
         # ----------------client---------------
         IP = socket.gethostbyname(socket.gethostname())
@@ -161,7 +162,7 @@ class Main(QMainWindow):
 
     def linkto(self):
         link = QFileDialog.getOpenFileName(filter='*.doc *.docx')
-        self.Text_3.setText(link[0])
+        self.HopDongUi.Text_3.setText(link[0])
 
     def Trovetrangchu(self):
         self.HopDongWin.close()
@@ -179,8 +180,7 @@ class Main(QMainWindow):
 
     def chayserver(self):
         IP = socket.gethostbyname(socket.gethostname())
-        # PORT = random.randint(1100, 65535)
-        PORT = 65535
+        PORT = self.NhanHopDongUi.Text_Port.text()
         ADDR = (IP, PORT)
         SIZE = 1024
         FORMAT = "utf-8"
@@ -195,7 +195,7 @@ class Main(QMainWindow):
         """ Server is listening, i.e., server is now waiting for the client to connected. """
         server.listen()
         print("[LISTENING] Server is listening.")
-
+        # self.NhanHopDongUi.label_xacnhan = "Đang đợi..."
         while True:
             """ Server has accepted the connection from the client. """
             conn, addr = server.accept()
