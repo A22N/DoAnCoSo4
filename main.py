@@ -10,6 +10,7 @@ from NhanHopDong import *
 from xulykey import RSA
 import docx2txt
 import socket
+import pyodbc
 
 
 class Main(QMainWindow):
@@ -17,6 +18,10 @@ class Main(QMainWindow):
         super().__init__()
         self.ui = Ui_DangNhapWindow()
         self.ui.setupUi(self)
+        self.conx = pyodbc.connect(
+            'DRIVER={ODBC Driver 17 for SQL Server};\
+        SERVER=LAPTOP-46CK9SKG; Database=hopdong_Account;\
+            UID=nguyenan123; PWD=123;')
 
         self.trangChuWin = QMainWindow()
         self.trangChuUI = Ui_TrangChuWindow()
@@ -67,14 +72,16 @@ class Main(QMainWindow):
     def dangNhap(self):
         email = self.ui.Text_email.text()
         pass_email = self.ui.Text_pass.text()
-        if email == "user" and pass_email == "123":
+        cursor = self.conx.cursor()
+        die = 1
+        for row in cursor.execute("select * from Account where email = ? and pass = ?", email, pass_email):
             self.trangChuWin.show()
             self.hide()
-        else:
+            die = 0
+        if die == 1:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Information)
             msg.setText("Tài khoản không hợp lệ!!!")
-            msg.setWindowTitle("Thông báo")
             msg.exec_()
 
     def dangky(self):

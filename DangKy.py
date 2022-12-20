@@ -9,22 +9,25 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import bgr_qrc
+
 
 class Ui_DangKyWindow(object):
     def setupUi(self, DangKyWindow):
         DangKyWindow.setObjectName("DangKyWindow")
         DangKyWindow.resize(600, 400)
         DangKyWindow.setStyleSheet("\n"
-                                     "QMainWindow{\n"
-                                     " border-image: url(:/background/image/Nen-xanh-duong-pastel.ng.jpg);\n"
-                                     "background-color: rgb(0, 255, 255);\n"
-                                     "}\n"
-                                     "")
+"QMainWindow{\n"
+" border-image: url(:/background/image/Nen-xanh-duong-pastel.ng.jpg);\n"
+"background-color: rgb(0, 255, 255);\n"
+"}\n"
+"")
         self.centralwidget = QtWidgets.QWidget(DangKyWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(30, 43, 111, 20))
+        self.label.setGeometry(QtCore.QRect(30, 43, 171, 20))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.label.setFont(font)
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(30, 73, 101, 20))
@@ -38,24 +41,24 @@ class Ui_DangKyWindow(object):
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
         self.label_7.setGeometry(QtCore.QRect(290, 150, 81, 20))
         self.label_7.setObjectName("label_7")
-        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit.setGeometry(QtCore.QRect(30, 100, 181, 31))
-        self.textEdit.setObjectName("textEdit")
-        self.textEdit_2 = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit_2.setGeometry(QtCore.QRect(290, 100, 181, 31))
-        self.textEdit_2.setObjectName("textEdit_2")
-        self.textEdit_3 = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit_3.setGeometry(QtCore.QRect(290, 180, 181, 31))
-        self.textEdit_3.setObjectName("textEdit_3")
-        self.textEdit_4 = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit_4.setGeometry(QtCore.QRect(30, 180, 181, 31))
-        self.textEdit_4.setObjectName("textEdit_4")
+        self.text_doanhnghiep = QtWidgets.QTextEdit(self.centralwidget)
+        self.text_doanhnghiep.setGeometry(QtCore.QRect(30, 100, 181, 31))
+        self.text_doanhnghiep.setObjectName("text_doanhnghiep")
+        self.textEdit_masothue = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_masothue.setGeometry(QtCore.QRect(290, 100, 181, 31))
+        self.textEdit_masothue.setObjectName("textEdit_masothue")
+        self.textEdit_sodienthoai = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_sodienthoai.setGeometry(QtCore.QRect(290, 180, 181, 31))
+        self.textEdit_sodienthoai.setObjectName("textEdit_sodienthoai")
+        self.textEdit_hocvaten = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_hocvaten.setGeometry(QtCore.QRect(30, 180, 181, 31))
+        self.textEdit_hocvaten.setObjectName("textEdit_hocvaten")
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
         self.label_5.setGeometry(QtCore.QRect(30, 233, 61, 20))
         self.label_5.setObjectName("label_5")
-        self.textEdit_5 = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit_5.setGeometry(QtCore.QRect(30, 260, 181, 31))
-        self.textEdit_5.setObjectName("textEdit_5")
+        self.textEdit_email = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_email.setGeometry(QtCore.QRect(30, 260, 181, 31))
+        self.textEdit_email.setObjectName("textEdit_email")
         self.textEdit_6 = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit_6.setGeometry(QtCore.QRect(290, 257, 181, 31))
         self.textEdit_6.setObjectName("textEdit_6")
@@ -65,7 +68,7 @@ class Ui_DangKyWindow(object):
         self.label_8 = QtWidgets.QLabel(self.centralwidget)
         self.label_8.setGeometry(QtCore.QRect(20, 7, 41, 31))
         self.label_8.setText("")
-        self.label_8.setPixmap(QtGui.QPixmap("C:/Users/HAMATASURIMA/Desktop/HYde (1).png"))
+        self.label_8.setPixmap(QtGui.QPixmap("HYde (1).png"))
         self.label_8.setScaledContents(True)
         self.label_8.setObjectName("label_8")
         self.label_9 = QtWidgets.QLabel(self.centralwidget)
@@ -95,7 +98,7 @@ class Ui_DangKyWindow(object):
         self.label_4.setText(_translate("DangKyWindow", "HỌ VÀ TÊN"))
         self.label_7.setText(_translate("DangKyWindow", "SỐ ĐIỆN THOẠI"))
         self.label_5.setText(_translate("DangKyWindow", "EMAIL"))
-        self.label_6.setText(_translate("DangKyWindow", "Email"))
+        self.label_6.setText(_translate("DangKyWindow", "MẬT KHẨU"))
         self.label_9.setText(_translate("DangKyWindow", "MOON.eContract"))
         self.pushButton_2.setText(_translate("DangKyWindow", "ĐĂNG KÝ"))
         self.pushButton_Back.setText(_translate("DangKyWindow", "TRỞ VỀ"))
