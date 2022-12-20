@@ -46,8 +46,10 @@ class Main(QMainWindow):
         # nút ở đang đăng nhập
         self.ui.pushButton_login.clicked.connect(self.dangNhap)
         self.ui.pushButton_register.clicked.connect(self.dangky)
-        # nút ở trang chủ
+
+        # nút ở đăng ký
         self.DangKyUi.pushButton_Back.clicked.connect(self.Trovetrangchu3)
+        self.DangKyUi.pushButton_dangky.clicked.connect(self.dangkytaikhoan)
 
         # nút ở trang chủ
         self.trangChuUI.dangXuatButton.clicked.connect(self.dangXuat)
@@ -92,6 +94,30 @@ class Main(QMainWindow):
     def Trovetrangchu3(self):
         self.DangKyWin.close()
         self.show()
+
+    def dangkytaikhoan(self):
+        doanh_nghiep = self.DangKyUi.Text_doanhnghiep.text()
+        ma_so_thue = self.DangKyUi.Text_masothue.text()
+        ho_ten = self.DangKyUi.Text_hoten.text()
+        sdt = self.DangKyUi.Text_sdt.text()
+        email = self.DangKyUi.Text_email.text()
+        pass_email = self.DangKyUi.Text_pass.text()
+        cursor = self.conx.cursor()
+        die = 1
+        for row in cursor.execute("select * from Account where doanh_nghiep = ? and ma_so_thue = ? and ho_va_ten = ? and sdt = ? and email = ? and pass = ?", doanh_nghiep, ma_so_thue, ho_ten, sdt, email, pass_email):
+            die = 2
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setText("Tài khoản không hợp lệ!!!")
+            msg.exec_()
+        if die == 1:
+            cursor.execute("insert Account values (?,?,?,?,?,?)",
+                           doanh_nghiep, ma_so_thue, ho_ten, sdt, email, pass_email)
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setText("Tài khoản đăng ký thành công !!!")
+            msg.exec_()
+
     # nút ở trang chủ
 
     def dangXuat(self):
