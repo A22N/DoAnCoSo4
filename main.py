@@ -11,6 +11,7 @@ from NhanHopDong import *
 from TaoHopDong import *
 from xulykey import RSA
 import socket
+import os
 import pyodbc
 import random
 import aspose.words as aw
@@ -166,11 +167,14 @@ class Main(QMainWindow):
         self.a = files
         print(len(self.a))
         self.show_pic(i=0)
+        self.dem2 = dem
         dem1 = dem
         for i in range(dem):
-            chuoi2 = str('D:/Ki_1_nam_3/DoAn4/') + str(dem1) + '.png'
+            chuoi2 = str('D:/Ki_1_nam_3/DoAn4/') + \
+                str(dem1) + '.png'
             print(chuoi2)
-            chuoi3 = str('D:/Ki_1_nam_3/DoAn4/') + str(dem1) + '.txt'
+            chuoi3 = str('D:/Ki_1_nam_3/DoAn4/data_nguoi_gui/files/data') + \
+                str(dem1) + '.txt'
             print(chuoi3)
             with open(f"{chuoi2}", "rb") as image2string:
                 converted_string = base64.b64encode(image2string.read())
@@ -211,8 +215,8 @@ class Main(QMainWindow):
         self.GiaiMaWin.show()
 
     def NhanHopDong(self):
-        self.HopDongWin.close()
-        self.trangChuWin.show()
+        self.trangChuWin.close()
+        self.NhanHopDongWin.show()
 
     # nút ở gửi hợp đồng
     def Trovetrangchu5(self):
@@ -233,29 +237,67 @@ class Main(QMainWindow):
             chay = 1
             print(PORT)
         if chay == 1:
-            sock = socket.socket()
-            print("Socket created successfully.")
-            host = '127.0.0.10'
+            IP = "127.0.0.1"
+            SIZE = 1024000
+            FORMAT = "utf"
+            CLIENT_FOLDER = "data_nguoi_gui"
 
-            sock.connect((host, PORT))
-            print('Connection Established.')
+            client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            client.connect((IP, PORT))
 
-            sock.send('A message from the client'.encode())
-            file = open('client-file.txt', 'wb')
+            """ Folder path """
+            path = os.path.join(CLIENT_FOLDER, "files")
+            folder_name = path.split("/")[-1]
 
-            line = sock.recv(1024)
+            """ Sending the folder name """
+            msg = f"{folder_name}"
+            print(f"[CLIENT] Sending folder name: {folder_name}")
+            client.send(msg.encode(FORMAT))
 
-            while (line):
-                file.write(line)
-                line = sock.recv(1024)
+            """ Receiving the reply from the server """
+            msg = client.recv(SIZE).decode(FORMAT)
+            print(f"[SERVER] {msg}\n")
 
-            print('File has been received successfully.')
+            """ Sending files """
+            files = sorted(os.listdir(path))
 
-            file.close()
-            sock.close()
-            print('Connection Closed.')
+            for file_name in files:
+                """ Send the file name """
+                msg = f"FILENAME:{file_name}"
+                print(f"[CLIENT] Sending file name: {file_name}")
+                client.send(msg.encode(FORMAT))
 
-            print("ok")
+                """ Recv the reply from the server """
+                msg = client.recv(SIZE).decode(FORMAT)
+                print(f"[SERVER] {msg}")
+
+                """ Send the data """
+                file = open(os.path.join(path, file_name), "r")
+                file_data = file.read()
+
+                msg = f"DATA:{file_data}"
+                client.send(msg.encode(FORMAT))
+                msg = client.recv(SIZE).decode(FORMAT)
+                print(f"[SERVER] {msg}")
+
+                """ Sending the close command """
+                msg = f"FINISH:Complete data send"
+                client.send(msg.encode(FORMAT))
+                msg = client.recv(SIZE).decode(FORMAT)
+                print(f"[SERVER] {msg}")
+
+                """ Closing the connection from the server """
+                msg = f"CLOSE:File transfer is completed"
+                client.send(msg.encode(FORMAT))
+                client.close()
+
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setText("Đã gửi được hợp đồng thành công!!!")
+            msg.setWindowTitle("Thông báo")
+            msg.exec_()
+        self.HopDongWin.hide()
+        self.trangChuWin.show()
 
     def linkto(self):
         link = QFileDialog.getOpenFileName(filter='*.doc *.docx')
@@ -284,38 +326,68 @@ class Main(QMainWindow):
             chay = 1
             print(port)
         if chay == 1:
-            sock = socket.socket()
-            print("Socket created successfully.")
-            host = '127.0.0.10'
-
-            sock.bind((host, port))
-
-            sock.listen(10)
-            self.NhanHopDongUi.label_xacnhan.setText('Loading......!')
-            print('Socket is listening...')
+            IP = "127.0.0.1"
+            PORT = int(port)
+            SIZE = 1024000
+            FORMAT = "utf"
+            SERVER_FOLDER = "data_nguoi_nhan"
+            print("[STARTING] Server is starting.\n")
+            server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            server.bind((IP, PORT))
+            server.listen()
+            print("[LISTENING] Server is waiting for clients.")
 
             while True:
-                con, addr = sock.accept()
-                print('Connected with ', addr)
+                conn, addr = server.accept()
+                print(f"[NEW CONNECTION] {addr} connected.\n")
 
-                data = con.recv(1024)
-                print(data.decode())
+                """ Receiving the folder_name """
+                folder_name = conn.recv(SIZE).decode(FORMAT)
 
-                file = open('server_data.txt', 'rb')
-                line = file.read(1024)
+                """ Creating the folder """
+                folder_path = os.path.join(SERVER_FOLDER, folder_name)
+                if not os.path.exists(folder_path):
+                    os.makedirs(folder_path)
+                    conn.send(
+                        f"Folder ({folder_name}) created.".encode(FORMAT))
+                else:
+                    conn.send(
+                        f"Folder ({folder_name}) already exists.".encode(FORMAT))
 
-                while (line):
-                    con.send(line)
-                    line = file.read(1024)
+                """ Receiving files """
+                while True:
+                    msg = conn.recv(SIZE).decode(FORMAT)
+                    cmd, data = msg.split(":")
 
-                file.close()
-                print('File has been transferred successfully.')
-                con.close()
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Information)
-                msg.setText("Đã nhận được hợp đồng!!!")
-                msg.setWindowTitle("Thông báo")
-                msg.exec_()
+                    if cmd == "FILENAME":
+                        """ Recv the file name """
+                        print(f"[CLIENT] Received the filename: {data}.")
+
+                        file_path = os.path.join(folder_path, data)
+                        file = open(file_path, "w")
+                        conn.send("Filename received.".encode(FORMAT))
+
+                    elif cmd == "DATA":
+                        """ Recv data from client """
+                        print(f"[CLIENT] Receiving the file data.")
+                        file.write(data)
+                        conn.send("File data received".encode(FORMAT))
+
+                    elif cmd == "FINISH":
+                        file.close()
+                        print(f"[CLIENT] {data}.\n")
+                        conn.send("The data is saved.".encode(FORMAT))
+
+                    elif cmd == "CLOSE":
+                        conn.close()
+                        print(f"[CLIENT] {data}")
+                        break
+
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setText("Đã nhận được hợp đồng!!!")
+        msg.setWindowTitle("Thông báo")
+        msg.exec_()
         self.NhanHopDongWin.close()
         self.trangChuWin.show()
 

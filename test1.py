@@ -1,10 +1,8 @@
-import base64
-import re
+import aspose.words as aw
 
+doc = aw.Document()
+builder = aw.DocumentBuilder(doc)
 
-def decode_base64(data, altchars=b'+/'):
-    data = re.sub(rb'[^a-zA-Z0-9%s]+' % altchars, b'', data)  
-    missing_padding = len(data) % 4
-    if missing_padding:
-        data += b'=' * (4 - missing_padding)
-    return base64.b64decode(data, altchars)
+builder.insert_image("2.png")
+
+doc.save("Output.docx")

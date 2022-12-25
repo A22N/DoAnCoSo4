@@ -1,113 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TaoHopDongWindow</class>
- <widget class="QMainWindow" name="TaoHopDongWindow">
+ <class>TraHopDongWin</class>
+ <widget class="QMainWindow" name="TraHopDongWin">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>703</height>
+    <width>900</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">
-QMainWindow{
- border-image: url(:/background/image/Nen-xanh-duong-pastel.ng.jpg);
-background-color: rgb(0, 255, 255);
-}
-</string>
-  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton_FileHopDong">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>60</y>
-      <width>101</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>FILE HỢP ĐỒNG</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_trove">
-    <property name="geometry">
-     <rect>
-      <x>690</x>
-      <y>630</y>
-      <width>101</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>TRỞ VỀ</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_ManHinh">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>60</y>
-      <width>641</width>
-      <height>571</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::Box</enum>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_back">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>640</y>
-      <width>311</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&lt;</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_next">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>640</y>
-      <width>311</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&gt;</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
+      <y>0</y>
       <width>47</width>
       <height>31</height>
      </rect>
@@ -126,8 +37,8 @@ background-color: rgb(0, 255, 255);
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>10</y>
-      <width>191</width>
+      <y>0</y>
+      <width>181</width>
       <height>31</height>
      </rect>
     </property>
@@ -140,11 +51,56 @@ background-color: rgb(0, 255, 255);
      <string>HỢP ĐỒNG ĐIỆN TỬ</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_GuHopDong">
+   <widget class="QLabel" name="label_ManHinh">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>40</y>
+      <width>641</width>
+      <height>571</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_back">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>620</y>
+      <width>311</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_next">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>620</y>
+      <width>311</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&gt;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_trove">
     <property name="geometry">
      <rect>
       <x>680</x>
-      <y>120</y>
+      <y>630</y>
       <width>101</width>
       <height>41</height>
      </rect>
@@ -155,7 +111,80 @@ background-color: rgb(0, 255, 255);
      </font>
     </property>
     <property name="text">
-     <string>BƯỚC 2</string>
+     <string>TRỞ VỀ</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_ImageHopDong">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>40</y>
+      <width>121</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>HỢP ĐỒNG</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_ManHinh_ChuKy">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>170</y>
+      <width>201</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>130</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>CHỬ KÝ ĐỐI TÁC</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_trahopdong">
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>630</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>TIẾP</string>
     </property>
    </widget>
   </widget>
@@ -164,7 +193,7 @@ background-color: rgb(0, 255, 255);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>900</width>
      <height>21</height>
     </rect>
    </property>
