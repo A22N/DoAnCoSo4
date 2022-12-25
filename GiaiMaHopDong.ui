@@ -13,6 +13,14 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">
+QMainWindow{
+ border-image: url(:/background/image/Nen-xanh-duong-pastel.ng.jpg);
+background-color: rgb(0, 255, 255);
+}
+</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label">
     <property name="geometry">

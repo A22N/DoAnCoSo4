@@ -1,8 +1,10 @@
-import pyodbc
+import base64
+import re
 
 
-con = pyodbc.connect(
-    'DRIVER={ODBC Driver 17 for SQL Server};\
-        SERVER=LAPTOP-46CK9SKG; Database=Socket_Account;\
-            UID=nguyenan123; PWD=123;')
-print("ok")
+def decode_base64(data, altchars=b'+/'):
+    data = re.sub(rb'[^a-zA-Z0-9%s]+' % altchars, b'', data)  
+    missing_padding = len(data) % 4
+    if missing_padding:
+        data += b'=' * (4 - missing_padding)
+    return base64.b64decode(data, altchars)

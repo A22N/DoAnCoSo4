@@ -79,6 +79,7 @@ class Ui_DangKyWindow(object):
         self.Text_email.setObjectName("Text_email")
         self.Text_pass = QtWidgets.QLineEdit(self.centralwidget)
         self.Text_pass.setGeometry(QtCore.QRect(290, 260, 191, 31))
+        self.Text_pass.setEchoMode(QtWidgets.QLineEdit.Password)
         self.Text_pass.setObjectName("Text_pass")
         DangKyWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(DangKyWindow)

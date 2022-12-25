@@ -1,16 +1,21 @@
 import sys
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtWidgets import QMessageBox, QMainWindow, QApplication, QFileDialog
+from PyQt5.QtGui import QPixmap
 from DangNhap import *
 from DangKy import *
 from trangchu import *
 from GuiHopDong import *
 from GiaiMaHopDong import *
 from NhanHopDong import *
+from TaoHopDong import *
 from xulykey import RSA
-import docx2txt
 import socket
 import pyodbc
+import random
+import aspose.words as aw
+from PIL import Image
+import base64
 
 
 class Main(QMainWindow):
@@ -26,6 +31,10 @@ class Main(QMainWindow):
         self.trangChuWin = QMainWindow()
         self.trangChuUI = Ui_TrangChuWindow()
         self.trangChuUI.setupUi(self.trangChuWin)
+
+        self.TaoHopDongWin = QMainWindow()
+        self.TaoHopDongUI = Ui_TaoHopDongWindow()
+        self.TaoHopDongUI.setupUi(self.TaoHopDongWin)
 
         self.HopDongWin = QMainWindow()
         self.HopDongUi = Ui_HopDongWindow()
@@ -43,6 +52,16 @@ class Main(QMainWindow):
         self.NhanHopDongUi = Ui_NhanHopDongWindow()
         self.NhanHopDongUi.setupUi(self.NhanHopDongWin)
 
+        # nút tạo hợp đồng
+        self.TaoHopDongUI.pushButton_trove.clicked.connect(self.Trovetrangchu4)
+        self.TaoHopDongUI.pushButton_FileHopDong.clicked.connect(
+            self.linkto_pic)
+        self.TaoHopDongUI.pushButton_back.clicked.connect(self.back_pic)
+        self.TaoHopDongUI.pushButton_next.clicked.connect(self.next_pic)
+        self.i = 0
+        self.a = None
+        self.TaoHopDongUI.pushButton_GuHopDong.clicked.connect(self.GuiHopDong)
+
         # nút ở đang đăng nhập
         self.ui.pushButton_login.clicked.connect(self.dangNhap)
         self.ui.pushButton_register.clicked.connect(self.dangky)
@@ -59,7 +78,7 @@ class Main(QMainWindow):
             self.NhanHopDong)
 
         # nút ở gửi hợp đồng
-        self.HopDongUi.pushButton_file.clicked.connect(self.linkto)
+        self.HopDongUi.pushButton_file.clicked.connect(self.linkto_pic1)
         self.HopDongUi.pushButton_gui.clicked.connect(self.HopDong_result)
         self.HopDongUi.pushButton_back.clicked.connect(self.Trovetrangchu)
 
@@ -102,6 +121,7 @@ class Main(QMainWindow):
         sdt = self.DangKyUi.Text_sdt.text()
         email = self.DangKyUi.Text_email.text()
         pass_email = self.DangKyUi.Text_pass.text()
+        port1 = random.randint(30000, 99999)
         cursor = self.conx.cursor()
         die = 1
         for row in cursor.execute("select * from Account where doanh_nghiep = ? and ma_so_thue = ? and ho_va_ten = ? and sdt = ? and email = ? and pass = ?", doanh_nghiep, ma_so_thue, ho_ten, sdt, email, pass_email):
@@ -111,12 +131,58 @@ class Main(QMainWindow):
             msg.setText("Tài khoản không hợp lệ!!!")
             msg.exec_()
         if die == 1:
-            cursor.execute("insert Account values (?,?,?,?,?,?)",
-                           doanh_nghiep, ma_so_thue, ho_ten, sdt, email, pass_email)
+            cursor.execute("insert Account values (?,?,?,?,?,?,?)",
+                           doanh_nghiep, ma_so_thue, ho_ten, sdt, email, pass_email, port1)
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Information)
             msg.setText("Tài khoản đăng ký thành công !!!")
             msg.exec_()
+        self.conx.commit()
+
+    # nut o tao hop dong
+    def Trovetrangchu4(self):
+        self.TaoHopDongWin.close()
+        self.trangChuWin.show()
+
+    def linkto_pic(self):
+
+        link = QFileDialog.getOpenFileName(filter='*.doc *.docx')
+        print(link[0])
+        x = link[0].split("/// ", 1)
+        print(x[0])
+        doc = aw.Document(x[0])
+        self.dem = 0
+        chuoi1 = ''
+        for page in range(0, doc.page_count):
+            extractedPage = doc.extract_pages(page, 1)
+            extractedPage.save(f"{page + 1}.png")
+            self.dem = self.dem + 1
+            chuoi = str('D:/Ki_1_nam_3/DoAn4/') + str(self.dem) + '.png'
+            chuoi1 += chuoi + " "
+        print(chuoi1.split())
+        files = chuoi1.split()
+        print(files)
+        self.a = files
+        print(len(self.a))
+        self.show_pic(i=0)
+
+    def show_pic(self, i):
+        self.TaoHopDongUI.label_ManHinh.setPixmap(
+            QtGui.QPixmap(self.a[i]))
+
+    def back_pic(self):
+        if self.i > 0:
+            self.i -= 1
+            self.show_pic(self.i)
+
+    def next_pic(self):
+        if self.i < len(self.a)-1:
+            self.i += 1
+            self.show_pic(self.i)
+
+    def GuiHopDong(self):
+        self.TaoHopDongWin.close()
+        self.HopDongWin.show()
 
     # nút ở trang chủ
 
@@ -126,7 +192,7 @@ class Main(QMainWindow):
 
     def TaoHopDong(self):
         self.trangChuWin.close()
-        self.HopDongWin.show()
+        self.TaoHopDongWin.show()
 
     def GiaiMa(self):
         self.trangChuWin.close()
@@ -138,60 +204,59 @@ class Main(QMainWindow):
 
     # nút ở gửi hợp đồng
 
+    def linkto_pic1(self):
+        link = QFileDialog.getOpenFileName(filter='*.png')
+        self.HopDongUi.label_ChuKy.setPixmap(QtGui.QPixmap(link[0]))
+
     def HopDong_result(self):
-        self.rsa = RSA(keysize=32)
+        for i in range(self.dem):
+            tieude = self.HopDongUi.Text_2.text()
+            with open("{self.dem}.png", "rb") as image2string:
+                converted_string = base64.b64encode(image2string.read())
+            with open('{self.dem}+ "_data".txt', "wb") as file:
+                file.write(converted_string)
 
-        msg = docx2txt.process(self.HopDongUi.Text_3.text())
-        PORT = self.HopDongUi.Text.text()
-        tieude = self.HopDongUi.Text_2.text()
+            f = open("tieude.txt", "w")
+            f.write(tieude)
+            f.close()
 
-        enc = self.rsa.encrypt(msg)
+            print("ok")
+            # ----------------client---------------
+            cursor = self.conx.cursor()
+            email = self.DangKyUi.Text_email.text()
+            chay = 0
+            for row in cursor.execute("select * from Account where email = ?", email):
+                PORT = row.port
+                chay = 1
+            if chay == 1:
+                IP = socket.gethostbyname(socket.gethostname())
+                ADDR = (IP, PORT)
+                FORMAT = "utf-8"
+                SIZE = 1024
 
-        f = open("tieude.txt", "w")
-        f.write(tieude)
-        f.close()
+                # Chạy TCP socket
+                client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        f = open("data/data.txt", "w")
-        f.write(enc)
-        f.close()
+                # Kết nối đến server
+                client.connect(ADDR)
 
-        f = open("data/data.txt.txt", "a")
-        f.write(" " + str(self.rsa.d))
-        f.write(" " + str(self.rsa.N))
-        f.close()
+                # Mở đọc dữ liệu
+                file = open("data/data.txt", "r")
+                data = file.read()
 
-        print("ok")
+                # Gửi file đến server
+                client.send("data/data.txt".encode(FORMAT))
+                msg = client.recv(SIZE).decode(FORMAT)
+                print(f"[SERVER]: {msg}")
 
-        # ----------------client---------------
-        IP = socket.gethostbyname(socket.gethostname())
-        ADDR = (IP, PORT)
-        FORMAT = "utf-8"
-        SIZE = 1024
+                # Truyền data đến server
+                client.send(data.encode(FORMAT))
+                msg = client.recv(SIZE).decode(FORMAT)
+                print(f"[SERVER]: {msg}")
 
-        # Chạy TCP socket
-        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                file.close()
 
-        # Kết nối đến server
-        client.connect(ADDR)
-
-        # Mở đọc dữ liệu
-        file = open("data/data.txt", "r")
-        data = file.read()
-
-        # Gửi file đến server
-        client.send("data/data.txt".encode(FORMAT))
-        msg = client.recv(SIZE).decode(FORMAT)
-        print(f"[SERVER]: {msg}")
-
-        # Truyền data đến server
-        client.send(data.encode(FORMAT))
-        msg = client.recv(SIZE).decode(FORMAT)
-        print(f"[SERVER]: {msg}")
-
-        file.close()
-        client.close()
-
-        print("ok")
+                print("ok")
 
     def linkto(self):
         link = QFileDialog.getOpenFileName(filter='*.doc *.docx')
@@ -199,7 +264,7 @@ class Main(QMainWindow):
 
     def Trovetrangchu(self):
         self.HopDongWin.close()
-        self.trangChuWin.show()
+        self.TaoHopDongWin.show()
 
     # nút ở giải mã
     def Trovetrangchu1(self):
@@ -212,51 +277,59 @@ class Main(QMainWindow):
         self.trangChuWin.show()
 
     def chayserver(self):
-        IP = socket.gethostbyname(socket.gethostname())
-        PORT = self.NhanHopDongUi.Text_Port.text()
-        ADDR = (IP, PORT)
-        SIZE = 1024
-        FORMAT = "utf-8"
+        chay = 0
+        cursor = self.conx.cursor()
+        email = self.NhanHopDongUi.Text_Port.text()
+        for row in cursor.execute("select * from Account where email = ?", email):
+            PORT = row.port
+            chay = 1
+        if chay == 1:
+            IP = socket.gethostbyname(socket.gethostname())
+            ADDR = (IP, PORT)
+            SIZE = 1024
+            FORMAT = "utf-8"
+            self.NhanHopDongUi.label_xacnhan = "Đang đợi..."
 
-        print("[STARTING] Server is starting.")
-        """ Staring a TCP socket. """
-        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            print("[STARTING] Server is starting.")
+            """ Staring a TCP socket. """
+            server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        """ Bind the IP and PORT to the server. """
-        server.bind(ADDR)
+            """ Bind the IP and PORT to the server. """
+            server.bind(ADDR)
 
-        """ Server is listening, i.e., server is now waiting for the client to connected. """
-        server.listen()
-        print("[LISTENING] Server is listening.")
-        # self.NhanHopDongUi.label_xacnhan = "Đang đợi..."
-        while True:
-            """ Server has accepted the connection from the client. """
-            conn, addr = server.accept()
-            print(f"[NEW CONNECTION] {addr} connected.")
+            """ Server is listening, i.e., server is now waiting for the client to connected. """
+            server.listen()
+            print("[LISTENING] Server is listening.")
 
-            """ Receiving the filename from the client. """
-            filename = conn.recv(SIZE).decode(FORMAT)
-            print(f"[RECV] Receiving the filename.")
-            file = open(filename, "w")
-            conn.send("Filename received.".encode(FORMAT))
+            while True:
+                """ Server has accepted the connection from the client. """
+                conn, addr = server.accept()
+                print(f"[NEW CONNECTION] {addr} connected.")
 
-            """ Receiving the file data from the client. """
-            data = conn.recv(SIZE).decode(FORMAT)
-            print(f"[RECV] Receiving the file data.")
-            conn.send("File data received".encode(FORMAT))
-            f = open("server_data/server_data.txt", "w")
-            f.write(data)
-            """ Closing the file. """
-            f.close()
+                """ Receiving the filename from the client. """
+                filename = conn.recv(SIZE).decode(FORMAT)
+                print(f"[RECV] Receiving the filename.")
+                file = open(filename, "w")
+                conn.send("Filename received.".encode(FORMAT))
 
-            """ Closing the connection from the client. """
-            conn.close()
-            print(f"[DISCONNECTED] {addr} disconnected.")
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Information)
-            msg.setText("Đã nhận được hợp đồng!!!")
-            msg.setWindowTitle("Thông báo")
-            msg.exec_()
+                """ Receiving the file data from the client. """
+                data = conn.recv(SIZE).decode(FORMAT)
+                print(f"[RECV] Receiving the file data.")
+                conn.send("File data received".encode(FORMAT))
+                f = open("server_data/server_data.txt", "w")
+                f.write(data)
+                """ Closing the file. """
+                f.close()
+
+                """ Closing the connection from the client. """
+
+                conn.close()
+                print(f"[DISCONNECTED] {addr} disconnected.")
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Information)
+                msg.setText("Đã nhận được hợp đồng!!!")
+                msg.setWindowTitle("Thông báo")
+                msg.exec_()
 
 
 if __name__ == '__main__':
