@@ -33,7 +33,7 @@ class Ui_HopDongWindow(object):
         self.pushButton_gui.setGeometry(QtCore.QRect(240, 390, 75, 31))
         self.pushButton_gui.setObjectName("pushButton_gui")
         self.pushButton_back = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_back.setGeometry(QtCore.QRect(500, 390, 75, 31))
+        self.pushButton_back.setGeometry(QtCore.QRect(490, 340, 75, 31))
         self.pushButton_back.setObjectName("pushButton_back")
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
         self.label_5.setGeometry(QtCore.QRect(10, 10, 47, 31))
@@ -63,6 +63,9 @@ class Ui_HopDongWindow(object):
         self.label_ChuKy.setText("")
         self.label_ChuKy.setScaledContents(True)
         self.label_ChuKy.setObjectName("label_ChuKy")
+        self.pushButton_back_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_back_2.setGeometry(QtCore.QRect(520, 400, 75, 31))
+        self.pushButton_back_2.setObjectName("pushButton_back_2")
         HopDongWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(HopDongWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 600, 21))
@@ -82,6 +85,7 @@ class Ui_HopDongWindow(object):
         self.label_3.setText(_translate("HopDongWindow", "Tiêu đề"))
         self.label_4.setText(_translate("HopDongWindow", "Chữ Ký"))
         self.pushButton_file.setText(_translate("HopDongWindow", "Chọn file"))
+        self.pushButton_back_2.setText(_translate("HopDongWindow", "THOÁT"))
 
 
 if __name__ == "__main__":

@@ -1,30 +1,32 @@
 import socket
 
-HOST = '127.0.0.1'
-PORT = 8000
+sock = socket.socket()
+print("Socket created successfully.")
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((HOST, PORT))
-s.listen(2)
+port = 8800
+host = ''
+
+sock.bind((host, port))
+
+sock.listen(10)
+print('Socket is listening...')
 
 while True:
-    client, addr = s.accept()
+    con, addr = sock.accept()
+    print('Connected with ', addr)
 
-    try:
-        print('Connected by', addr)
-        while True:
-            data = client.recv(1024)
-            str_data = data.decode("utf8")
-            if str_data == "quit":
-                break
-            """if not data:
-                break
-            """
-            print("Client: " + str_data)
 
-            msg = input("Server: ")
+    data = con.recv(1024)
+    print(data.decode())
 
-    finally:
-        client.close()
+    file = open('server-file.txt', 'rb')
+    line = file.read(1024)
 
-s.close()
+    while (line):
+        con.send(line)
+        line = file.read(1024)
+
+    file.close()
+    print('File has been transferred successfully.')
+
+    con.close()

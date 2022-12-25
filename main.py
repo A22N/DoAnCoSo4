@@ -81,6 +81,7 @@ class Main(QMainWindow):
         self.HopDongUi.pushButton_file.clicked.connect(self.linkto_pic1)
         self.HopDongUi.pushButton_gui.clicked.connect(self.HopDong_result)
         self.HopDongUi.pushButton_back.clicked.connect(self.Trovetrangchu)
+        self.HopDongUi.pushButton_back_2.clicked.connect(self.Trovetrangchu5)
 
         # nút ở giải mã
         self.GiaiMaUi.pushButton_back.clicked.connect(self.Trovetrangchu1)
@@ -91,11 +92,11 @@ class Main(QMainWindow):
 
     # nút ở đang đăng nhập
     def dangNhap(self):
-        email = self.ui.Text_email.text()
+        self.email = self.ui.Text_email.text()
         pass_email = self.ui.Text_pass.text()
         cursor = self.conx.cursor()
         die = 1
-        for row in cursor.execute("select * from Account where email = ? and pass = ?", email, pass_email):
+        for row in cursor.execute("select * from Account where email = ? and pass = ?", self.email, pass_email):
             self.trangChuWin.show()
             self.hide()
             die = 0
@@ -120,6 +121,7 @@ class Main(QMainWindow):
         ho_ten = self.DangKyUi.Text_hoten.text()
         sdt = self.DangKyUi.Text_sdt.text()
         email = self.DangKyUi.Text_email.text()
+
         pass_email = self.DangKyUi.Text_pass.text()
         port1 = random.randint(30000, 99999)
         cursor = self.conx.cursor()
@@ -138,8 +140,8 @@ class Main(QMainWindow):
             msg.setText("Tài khoản đăng ký thành công !!!")
             msg.exec_()
         self.conx.commit()
-
     # nut o tao hop dong
+
     def Trovetrangchu4(self):
         self.TaoHopDongWin.close()
         self.trangChuWin.show()
@@ -151,20 +153,30 @@ class Main(QMainWindow):
         x = link[0].split("/// ", 1)
         print(x[0])
         doc = aw.Document(x[0])
-        self.dem = 0
+        dem = 0
         chuoi1 = ''
         for page in range(0, doc.page_count):
             extractedPage = doc.extract_pages(page, 1)
             extractedPage.save(f"{page + 1}.png")
-            self.dem = self.dem + 1
-            chuoi = str('D:/Ki_1_nam_3/DoAn4/') + str(self.dem) + '.png'
+            dem = dem + 1
+            chuoi = str('D:/Ki_1_nam_3/DoAn4/') + str(dem) + '.png'
             chuoi1 += chuoi + " "
-        print(chuoi1.split())
         files = chuoi1.split()
         print(files)
         self.a = files
         print(len(self.a))
         self.show_pic(i=0)
+        dem1 = dem
+        for i in range(dem):
+            chuoi2 = str('D:/Ki_1_nam_3/DoAn4/') + str(dem1) + '.png'
+            print(chuoi2)
+            chuoi3 = str('D:/Ki_1_nam_3/DoAn4/') + str(dem1) + '.txt'
+            print(chuoi3)
+            with open(f"{chuoi2}", "rb") as image2string:
+                converted_string = base64.b64encode(image2string.read())
+            with open(f"{chuoi3}", "wb") as file:
+                file.write(converted_string)
+            dem1 = dem1 - 1
 
     def show_pic(self, i):
         self.TaoHopDongUI.label_ManHinh.setPixmap(
@@ -199,64 +211,51 @@ class Main(QMainWindow):
         self.GiaiMaWin.show()
 
     def NhanHopDong(self):
-        self.trangChuWin.close()
-        self.NhanHopDongWin.show()
+        self.HopDongWin.close()
+        self.trangChuWin.show()
 
     # nút ở gửi hợp đồng
+    def Trovetrangchu5(self):
+        self.HopDongWin.close()
+        self.trangChuWin.show()
 
     def linkto_pic1(self):
         link = QFileDialog.getOpenFileName(filter='*.png')
         self.HopDongUi.label_ChuKy.setPixmap(QtGui.QPixmap(link[0]))
 
     def HopDong_result(self):
-        for i in range(self.dem):
-            tieude = self.HopDongUi.Text_2.text()
-            with open("{self.dem}.png", "rb") as image2string:
-                converted_string = base64.b64encode(image2string.read())
-            with open('{self.dem}+ "_data".txt', "wb") as file:
-                file.write(converted_string)
+        # ----------------client---------------
+        cursor = self.conx.cursor()
+        print(self.email)
+        chay = 0
+        for row in cursor.execute("select * from Account where email = ?", self.email):
+            PORT = int(row.port)
+            chay = 1
+            print(PORT)
+        if chay == 1:
+            sock = socket.socket()
+            print("Socket created successfully.")
+            host = '127.0.0.10'
 
-            f = open("tieude.txt", "w")
-            f.write(tieude)
-            f.close()
+            sock.connect((host, PORT))
+            print('Connection Established.')
+
+            sock.send('A message from the client'.encode())
+            file = open('client-file.txt', 'wb')
+
+            line = sock.recv(1024)
+
+            while (line):
+                file.write(line)
+                line = sock.recv(1024)
+
+            print('File has been received successfully.')
+
+            file.close()
+            sock.close()
+            print('Connection Closed.')
 
             print("ok")
-            # ----------------client---------------
-            cursor = self.conx.cursor()
-            email = self.DangKyUi.Text_email.text()
-            chay = 0
-            for row in cursor.execute("select * from Account where email = ?", email):
-                PORT = row.port
-                chay = 1
-            if chay == 1:
-                IP = socket.gethostbyname(socket.gethostname())
-                ADDR = (IP, PORT)
-                FORMAT = "utf-8"
-                SIZE = 1024
-
-                # Chạy TCP socket
-                client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-                # Kết nối đến server
-                client.connect(ADDR)
-
-                # Mở đọc dữ liệu
-                file = open("data/data.txt", "r")
-                data = file.read()
-
-                # Gửi file đến server
-                client.send("data/data.txt".encode(FORMAT))
-                msg = client.recv(SIZE).decode(FORMAT)
-                print(f"[SERVER]: {msg}")
-
-                # Truyền data đến server
-                client.send(data.encode(FORMAT))
-                msg = client.recv(SIZE).decode(FORMAT)
-                print(f"[SERVER]: {msg}")
-
-                file.close()
-
-                print("ok")
 
     def linkto(self):
         link = QFileDialog.getOpenFileName(filter='*.doc *.docx')
@@ -281,55 +280,44 @@ class Main(QMainWindow):
         cursor = self.conx.cursor()
         email = self.NhanHopDongUi.Text_Port.text()
         for row in cursor.execute("select * from Account where email = ?", email):
-            PORT = row.port
+            port = int(row.port)
             chay = 1
+            print(port)
         if chay == 1:
-            IP = socket.gethostbyname(socket.gethostname())
-            ADDR = (IP, PORT)
-            SIZE = 1024
-            FORMAT = "utf-8"
-            self.NhanHopDongUi.label_xacnhan = "Đang đợi..."
+            sock = socket.socket()
+            print("Socket created successfully.")
+            host = '127.0.0.10'
 
-            print("[STARTING] Server is starting.")
-            """ Staring a TCP socket. """
-            server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.bind((host, port))
 
-            """ Bind the IP and PORT to the server. """
-            server.bind(ADDR)
-
-            """ Server is listening, i.e., server is now waiting for the client to connected. """
-            server.listen()
-            print("[LISTENING] Server is listening.")
+            sock.listen(10)
+            self.NhanHopDongUi.label_xacnhan.setText('Loading......!')
+            print('Socket is listening...')
 
             while True:
-                """ Server has accepted the connection from the client. """
-                conn, addr = server.accept()
-                print(f"[NEW CONNECTION] {addr} connected.")
+                con, addr = sock.accept()
+                print('Connected with ', addr)
 
-                """ Receiving the filename from the client. """
-                filename = conn.recv(SIZE).decode(FORMAT)
-                print(f"[RECV] Receiving the filename.")
-                file = open(filename, "w")
-                conn.send("Filename received.".encode(FORMAT))
+                data = con.recv(1024)
+                print(data.decode())
 
-                """ Receiving the file data from the client. """
-                data = conn.recv(SIZE).decode(FORMAT)
-                print(f"[RECV] Receiving the file data.")
-                conn.send("File data received".encode(FORMAT))
-                f = open("server_data/server_data.txt", "w")
-                f.write(data)
-                """ Closing the file. """
-                f.close()
+                file = open('server_data.txt', 'rb')
+                line = file.read(1024)
 
-                """ Closing the connection from the client. """
+                while (line):
+                    con.send(line)
+                    line = file.read(1024)
 
-                conn.close()
-                print(f"[DISCONNECTED] {addr} disconnected.")
+                file.close()
+                print('File has been transferred successfully.')
+                con.close()
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Information)
                 msg.setText("Đã nhận được hợp đồng!!!")
                 msg.setWindowTitle("Thông báo")
                 msg.exec_()
+        self.NhanHopDongWin.close()
+        self.trangChuWin.show()
 
 
 if __name__ == '__main__':
