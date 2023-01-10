@@ -74,9 +74,11 @@ class Main(QMainWindow):
         # nút ở trang chủ
         self.trangChuUI.dangXuatButton.clicked.connect(self.dangXuat)
         self.trangChuUI.pushButton_GuiHopDong.clicked.connect(self.TaoHopDong)
-        self.trangChuUI.pushButton_GiaiMa.clicked.connect(self.GiaiMa)
+        # self.trangChuUI.pushButton_GiaiMa.clicked.connect(self.GiaiMa)
         self.trangChuUI.pushButton_NhanHopDong.clicked.connect(
             self.NhanHopDong)
+        self.trangChuUI.pushButton_ShowHopDong.clicked.connect(
+            self.ShowHopDong)
 
         # nút ở gửi hợp đồng
         self.HopDongUi.pushButton_file.clicked.connect(self.linkto_pic1)
@@ -201,6 +203,9 @@ class Main(QMainWindow):
         self.HopDongWin.show()
 
     # nút ở trang chủ
+    def ShowHopDong(self):
+        self.self.trangChuWin.close()
+        self
 
     def dangXuat(self):
         self.trangChuWin.close()
@@ -210,9 +215,7 @@ class Main(QMainWindow):
         self.trangChuWin.close()
         self.TaoHopDongWin.show()
 
-    def GiaiMa(self):
-        self.trangChuWin.close()
-        self.GiaiMaWin.show()
+    # def GiaiMa(self):
 
     def NhanHopDong(self):
         self.trangChuWin.close()
@@ -226,8 +229,13 @@ class Main(QMainWindow):
     def linkto_pic1(self):
         link = QFileDialog.getOpenFileName(filter='*.png')
         self.HopDongUi.label_ChuKy.setPixmap(QtGui.QPixmap(link[0]))
+        with open("chuky.png", "rb") as image2string:
+            converted_string = base64.b64encode(image2string.read())
+        with open(r'D:\Ki_1_nam_3\DoAn4\data_nguoi_gui/files\chuky.txt', "wb") as file:
+            file.write(converted_string)
 
     def HopDong_result(self):
+
         # ----------------client---------------
         cursor = self.conx.cursor()
         print(self.email)
@@ -286,16 +294,63 @@ class Main(QMainWindow):
                 msg = client.recv(SIZE).decode(FORMAT)
                 print(f"[SERVER] {msg}")
 
-                """ Closing the connection from the server """
-                msg = f"CLOSE:File transfer is completed"
-                client.send(msg.encode(FORMAT))
-                client.close()
+            """ Closing the connection from the server """
+            msg = f"CLOSE:File transfer is completed"
+            client.send(msg.encode(FORMAT))
 
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Information)
             msg.setText("Đã gửi được hợp đồng thành công!!!")
             msg.setWindowTitle("Thông báo")
             msg.exec_()
+        dem1 = 3
+        for i in range(3):
+            chuoi2 = str('D:/Ki_1_nam_3/DoAn4/data_nguoi_nhan/files/data') + \
+                str(dem1) + '.txt'
+            print(chuoi2)
+            chuoi3 = str('D:/Ki_1_nam_3/DoAn4/image_nguoi_nhan') + \
+                str(dem1) + '.png'
+
+            file = open(f"{chuoi2}", "rb")
+            byte = file.read()
+            file.close()
+
+            fh = open(f"{chuoi3}", "wb")
+            fh.write(base64.b64decode((byte)))
+            fh.close()
+            dem1 = dem1 - 1
+        dem3 = 3
+        for i in range(3):
+            chuoi4 = str('D:/Ki_1_nam_3/DoAn4/data_nguoi_gui/files/data') + \
+                str(dem3) + '.txt'
+            print(chuoi2)
+            chuoi5 = str('D:/Ki_1_nam_3/DoAn4/image_nguoi_gui') + \
+                str(dem3) + '.png'
+
+            file = open(f"{chuoi4}", "rb")
+            byte = file.read()
+            file.close()
+
+            fh = open(f"{chuoi5}", "wb")
+            fh.write(base64.b64decode((byte)))
+            fh.close()
+            dem3 = dem3 - 1
+        file = open(r'D:\Ki_1_nam_3\DoAn4\data_nguoi_gui\files\chuky.txt', "rb")
+        byte = file.read()
+        file.close()
+
+        fh = open(r'D:\Ki_1_nam_3\DoAn4\image_nguoi_gui\chuky.png', "wb")
+        fh.write(base64.b64decode((byte)))
+        fh.close()
+
+        file = open(
+            r'D:\Ki_1_nam_3\DoAn4\data_nguoi_nhan\files\chuky.txt', "rb")
+        byte = file.read()
+        file.close()
+
+        fh = open(r'D:\Ki_1_nam_3\DoAn4\image_nguoi_nhan\chuky.png', "wb")
+        fh.write(base64.b64decode((byte)))
+        fh.close()
         self.HopDongWin.hide()
         self.trangChuWin.show()
 
@@ -379,17 +434,64 @@ class Main(QMainWindow):
                         conn.send("The data is saved.".encode(FORMAT))
 
                     elif cmd == "CLOSE":
-                        conn.close()
                         print(f"[CLIENT] {data}")
                         break
 
-        msg = QMessageBox()
-        msg.setIcon(QMessageBox.Information)
-        msg.setText("Đã nhận được hợp đồng!!!")
-        msg.setWindowTitle("Thông báo")
-        msg.exec_()
-        self.NhanHopDongWin.close()
-        self.trangChuWin.show()
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Information)
+                msg.setText("Đã nhận được hợp đồng!!!")
+                msg.setWindowTitle("Thông báo")
+                msg.exec_()
+        dem1 = 3
+        for i in range(3):
+            chuoi2 = str('D:/Ki_1_nam_3/DoAn4/data_nguoi_nhan/data_nguoi_gui/files/data') + \
+                str(dem1) + '.txt'
+            print(chuoi2)
+            chuoi3 = str('D:/Ki_1_nam_3/DoAn4/image_nguoi_nhan') + \
+                str(dem1) + '.png'
+
+            file = open(f"{chuoi2}", "rb")
+            byte = file.read()
+            file.close()
+
+            fh = open(f"{chuoi3}", "wb")
+            fh.write(base64.b64decode((byte)))
+            fh.close()
+            dem1 = dem1 - 1
+        dem3 = 3
+        for i in range(3):
+            chuoi4 = str('D:/Ki_1_nam_3/DoAn4/data_nguoi_gui/files/data') + \
+                str(dem3) + '.txt'
+            print(chuoi2)
+            chuoi5 = str('D:/Ki_1_nam_3/DoAn4/image_nguoi_gui') + \
+                str(dem3) + '.png'
+
+            file = open(f"{chuoi4}", "rb")
+            byte = file.read()
+            file.close()
+
+            fh = open(f"{chuoi5}", "wb")
+            fh.write(base64.b64decode((byte)))
+            fh.close()
+            dem3 = dem3 - 1
+        file = open(r'D:\Ki_1_nam_3\DoAn4\data_nguoi_gui\files\chuky.txt', "rb")
+        byte = file.read()
+        file.close()
+
+        fh = open(r'D:\Ki_1_nam_3\DoAn4\image_nguoi_gui\chuky.png', "wb")
+        fh.write(base64.b64decode((byte)))
+        fh.close()
+
+        file = open(
+            r'D:\Ki_1_nam_3\DoAn4\data_nguoi_nhan\data_nguoi_gui\files\chuky.txt', "rb")
+        byte = file.read()
+        file.close()
+
+        fh = open(r'D:\Ki_1_nam_3\DoAn4\image_nguoi_nhan\chuky.png', "wb")
+        fh.write(base64.b64decode((byte)))
+        fh.close()
+        self.HopDongWin.hide()
+        self.GiaiMaWin.show()
 
 
 if __name__ == '__main__':

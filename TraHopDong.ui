@@ -99,8 +99,8 @@
    <widget class="QPushButton" name="pushButton_trove">
     <property name="geometry">
      <rect>
-      <x>680</x>
-      <y>630</y>
+      <x>790</x>
+      <y>640</y>
       <width>101</width>
       <height>41</height>
      </rect>
@@ -136,7 +136,7 @@
     <property name="geometry">
      <rect>
       <x>680</x>
-      <y>170</y>
+      <y>110</y>
       <width>201</width>
       <height>201</height>
      </rect>
@@ -154,8 +154,8 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>730</x>
-      <y>130</y>
+      <x>720</x>
+      <y>90</y>
       <width>101</width>
       <height>20</height>
      </rect>
@@ -169,13 +169,32 @@
      <string>CHỬ KÝ ĐỐI TÁC</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_trahopdong">
+   <widget class="QLabel" name="label_ManHinh_ChuKy_2">
     <property name="geometry">
      <rect>
-      <x>790</x>
-      <y>630</y>
+      <x>680</x>
+      <y>360</y>
+      <width>201</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>330</y>
       <width>101</width>
-      <height>41</height>
+      <height>20</height>
      </rect>
     </property>
     <property name="font">
@@ -184,7 +203,7 @@
      </font>
     </property>
     <property name="text">
-     <string>TIẾP</string>
+     <string>CHỬ KÝ ADMIN</string>
     </property>
    </widget>
   </widget>

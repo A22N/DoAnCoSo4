@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'trangchu.ui'
+# Form implementation generated from reading ui file 'TrangChu.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -125,6 +125,9 @@ class Ui_TrangChuWindow(object):
         self.pushButton_NhanHopDong = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_NhanHopDong.setGeometry(QtCore.QRect(180, 210, 75, 31))
         self.pushButton_NhanHopDong.setObjectName("pushButton_NhanHopDong")
+        self.pushButton_ShowHopDong = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_ShowHopDong.setGeometry(QtCore.QRect(460, 210, 75, 31))
+        self.pushButton_ShowHopDong.setObjectName("pushButton_ShowHopDong")
         TrangChuWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(TrangChuWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 600, 21))
@@ -159,6 +162,8 @@ class Ui_TrangChuWindow(object):
         self.dangXuatButton.setText(_translate("TrangChuWindow", "Đăng xuất"))
         self.pushButton_NhanHopDong.setText(
             _translate("TrangChuWindow", "Nhận"))
+        self.pushButton_ShowHopDong.setText(
+            _translate("TrangChuWindow", "Hợp Đồng"))
 
 
 if __name__ == "__main__":

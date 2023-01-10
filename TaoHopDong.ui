@@ -155,7 +155,7 @@ background-color: rgb(0, 255, 255);
      </font>
     </property>
     <property name="text">
-     <string>BƯỚC 2</string>
+     <string>TIẾP</string>
     </property>
    </widget>
   </widget>

@@ -54,7 +54,10 @@ class Ui_TaoHopDongWindow(object):
         self.label_5.setScaledContents(True)
         self.label_5.setObjectName("label_5")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(70, 10, 111, 31))
+        self.label.setGeometry(QtCore.QRect(70, 10, 191, 31))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label.setFont(font)
         self.label.setObjectName("label")
         self.pushButton_GuHopDong = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_GuHopDong.setGeometry(QtCore.QRect(680, 120, 101, 41))
@@ -79,7 +82,7 @@ class Ui_TaoHopDongWindow(object):
         self.pushButton_back.setText(_translate("TaoHopDongWindow", "<"))
         self.pushButton_next.setText(_translate("TaoHopDongWindow", ">"))
         self.label.setText(_translate("TaoHopDongWindow", "HỢP ĐỒNG ĐIỆN TỬ"))
-        self.pushButton_GuHopDong.setText(_translate("TaoHopDongWindow", "BƯỚC 2"))
+        self.pushButton_GuHopDong.setText(_translate("TaoHopDongWindow", "TIẾP"))
 
 
 if __name__ == "__main__":
