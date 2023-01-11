@@ -308,7 +308,7 @@ class Main(QMainWindow):
             chuoi2 = str('D:/Ki_1_nam_3/DoAn4/data_nguoi_nhan/files/data') + \
                 str(dem1) + '.txt'
             print(chuoi2)
-            chuoi3 = str('D:/Ki_1_nam_3/DoAn4/image_nguoi_nhan') + \
+            chuoi3 = str('D:/Ki_1_nam_3/DoAn4/image_nguoi_nhan/') + \
                 str(dem1) + '.png'
 
             file = open(f"{chuoi2}", "rb")
@@ -447,7 +447,7 @@ class Main(QMainWindow):
             chuoi2 = str('D:/Ki_1_nam_3/DoAn4/data_nguoi_nhan/data_nguoi_gui/files/data') + \
                 str(dem1) + '.txt'
             print(chuoi2)
-            chuoi3 = str('D:/Ki_1_nam_3/DoAn4/image_nguoi_nhan') + \
+            chuoi3 = str('D:/Ki_1_nam_3/DoAn4/image_nguoi_nhan/') + \
                 str(dem1) + '.png'
 
             file = open(f"{chuoi2}", "rb")
