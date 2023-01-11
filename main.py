@@ -9,6 +9,7 @@ from GuiHopDong import *
 from GiaiMaHopDong import *
 from NhanHopDong import *
 from TaoHopDong import *
+from TraHopDong import *
 from xulykey import RSA
 import socket
 import os
@@ -45,6 +46,10 @@ class Main(QMainWindow):
         self.DangKyUi = Ui_DangKyWindow()
         self.DangKyUi.setupUi(self.DangKyWin)
 
+        self.TraHopDongWin = QMainWindow()
+        self.TraHopDongUi = Ui_TraHopDongWin()
+        self.TraHopDongUi.setupUi(self.TraHopDongWin)
+
         self.GiaiMaWin = QMainWindow()
         self.GiaiMaUi = Ui_GiaiMaWindow()
         self.GiaiMaUi.setupUi(self.GiaiMaWin)
@@ -66,6 +71,15 @@ class Main(QMainWindow):
         # nút ở đang đăng nhập
         self.ui.pushButton_login.clicked.connect(self.dangNhap)
         self.ui.pushButton_register.clicked.connect(self.dangky)
+
+        # nut o tra hop dong
+        self.TraHopDongUi.pushButton_ImageHopDong.clicked.connect(
+            self.hopdong)
+        self.TraHopDongUi.pushButton_back.clicked.connect(self.back_pic1)
+        self.TraHopDongUi.pushButton_next.clicked.connect(self.next_pic1)
+        self.j = 0
+        self.b = None
+        self.TraHopDongUi.pushButton_trove.clicked.connect(self.Trovetrangchu8)
 
         # nút ở đăng ký
         self.DangKyUi.pushButton_Back.clicked.connect(self.Trovetrangchu3)
@@ -92,6 +106,37 @@ class Main(QMainWindow):
         # nút ở nhận hợp đồng
         self.NhanHopDongUi.pushButton_Back.clicked.connect(self.Trovetrangchu2)
         self.NhanHopDongUi.pushButton.clicked.connect(self.chayserver)
+
+    # nut o tra hop dong
+    def ShowHopDong(self):
+        self.trangChuWin.close()
+        self.TraHopDongWin.show()
+
+    def hopdong(self):
+        files = QFileDialog.getOpenFileName(
+            None, "", "", "Python Files (*.png), Text Files(*)")
+        self.b = files[0]
+        print(self.b)
+        print(len(self.b))
+        self.show_pic1(j=0)
+
+    def show_pic1(self, j):
+        self.TraHopDongUi.label_ManHinh.setPixmap(
+            QtGui.QPixmap(self.b[j]))
+
+    def back_pic1(self):
+        if self.j > 0:
+            self.j -= 1
+            self.show_pic1(self.j)
+
+    def next_pic1(self):
+        if self.j < len(self.b)-1:
+            self.j += 1
+            self.show_pic1(self.j)
+
+    def Trovetrangchu8(self):
+        self.TraHopDongWin.close()
+        self.trangChuWin.show()
 
     # nút ở đang đăng nhập
     def dangNhap(self):
@@ -203,10 +248,6 @@ class Main(QMainWindow):
         self.HopDongWin.show()
 
     # nút ở trang chủ
-    def ShowHopDong(self):
-        self.self.trangChuWin.close()
-        self
-
     def dangXuat(self):
         self.trangChuWin.close()
         self.show()
@@ -305,7 +346,7 @@ class Main(QMainWindow):
             msg.exec_()
         dem1 = 3
         for i in range(3):
-            chuoi2 = str('D:/Ki_1_nam_3/DoAn4/data_nguoi_nhan/files/data') + \
+            chuoi2 = str('D:/Ki_1_nam_3/DoAn4/data_nguoi_nhan/data_nguoi_gui/files/data') + \
                 str(dem1) + '.txt'
             print(chuoi2)
             chuoi3 = str('D:/Ki_1_nam_3/DoAn4/image_nguoi_nhan/') + \
@@ -344,7 +385,7 @@ class Main(QMainWindow):
         fh.close()
 
         file = open(
-            r'D:\Ki_1_nam_3\DoAn4\data_nguoi_nhan\files\chuky.txt', "rb")
+            r'D:\Ki_1_nam_3\DoAn4\data_nguoi_nhan\data_nguoi_gui\files\chuky.txt', "rb")
         byte = file.read()
         file.close()
 
@@ -490,8 +531,16 @@ class Main(QMainWindow):
         fh = open(r'D:\Ki_1_nam_3\DoAn4\image_nguoi_nhan\chuky.png', "wb")
         fh.write(base64.b64decode((byte)))
         fh.close()
-        self.HopDongWin.hide()
-        self.GiaiMaWin.show()
+        print("ok")
+        cursor = self.conx.cursor()
+        email = self.NhanHopDongUi.Text_Port.text()
+        for row in cursor.execute("select * from Account where email = ?", email):
+            port = int(row.port)
+            chay = 1
+            print(port)
+        self.HopDongWin.close()
+        self.HopDongWin.show()
+        print("ok")
 
 
 if __name__ == '__main__':

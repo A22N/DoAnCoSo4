@@ -66,6 +66,9 @@
     <property name="text">
      <string/>
     </property>
+    <property name="pixmap">
+     <pixmap>image_nguoi_nhan/1.png</pixmap>
+    </property>
     <property name="scaledContents">
      <bool>true</bool>
     </property>
@@ -147,6 +150,9 @@
     <property name="text">
      <string/>
     </property>
+    <property name="pixmap">
+     <pixmap>image/tải xuống.png</pixmap>
+    </property>
     <property name="scaledContents">
      <bool>true</bool>
     </property>
@@ -183,6 +189,9 @@
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>image_nguoi_gui/chuky.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
